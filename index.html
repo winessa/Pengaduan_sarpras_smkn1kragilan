@@ -171,7 +171,7 @@
     <div class="form-container">
         <div class="header">
             <h2>SMKN 1 Kragilan</h2>
-            <p>Sistem Pengaduan Kebersihan & Kerusakan Sekolah. Laporkan segera!</p>
+            <p>Sistem Pengaduan Kebersihan & Kerusakan Sekolah.</p>
         </div>
 
         <form id="pengaduanForm">
@@ -200,9 +200,13 @@
                 <label for="keluhan">📝 Detail Keluhan</label>
                 <textarea id="keluhan" required></textarea>
             </div>
+            
             <div class="form-group">
-                <label for="foto">📸 Ambil Bukti Foto</label>
-                <input type="file" id="foto" accept="image/*" capture="environment" required>
+                <label for="foto">📸 Ambil / Upload Foto (Maks 5)</label>
+                <input type="file" id="foto" accept="image/*" multiple required>
+                <small style="color: #00ffff; font-size: 11px; display: block; margin-top: 8px; opacity: 0.8;">
+                    *Bisa pilih dari Galeri atau Kamera. Pilih sekaligus maksimal 5 foto.
+                </small>
             </div>
 
             <button type="submit" class="btn-submit" id="btnKirim">
@@ -222,92 +226,105 @@
     </div>
 
     <script>
-        // URL Apps Script Anda
+        // Link Apps Script
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyCKa7Itb8N7fgS_LsbYSgWNwCt7Bq92RpNaHQJ5XPpd3-QRI5mPcQZge_ATaoGlgyx5Q/exec';
         
-        // Nomor WA Anda
+        // Nomor WA 
         const nomorAdminWA = '6288210222618';
         
         const form = document.getElementById('pengaduanForm');
         const btnKirim = document.getElementById('btnKirim');
         const loadingText = document.getElementById('loadingText');
-        
-        // Elemen Modal
         const successModal = document.getElementById('successModal');
         const lanjutWaBtn = document.getElementById('lanjutWaBtn');
 
-        form.addEventListener('submit', e => {
+        form.addEventListener('submit', async e => {
             e.preventDefault();
             
+            const fileInput = document.getElementById('foto');
+            const files = fileInput.files;
+
+            // SISTEM KEAMANAN: Cek apakah foto lebih dari 5
+            if (files.length > 5) {
+                alert('Maksimal hanya boleh mengunggah 5 foto sekaligus! Silakan kurangi pilihan foto Anda.');
+                return; // Membatalkan pengiriman
+            }
+
             // Tampilkan animasi loading
             btnKirim.style.display = 'none';
             loadingText.style.display = 'block';
 
-            const fileInput = document.getElementById('foto');
-            const file = fileInput.files[0];
-            const reader = new FileReader();
+            // Memproses semua file foto secara bersamaan (Looping)
+            let filePromises = [];
+            for (let i = 0; i < files.length; i++) {
+                filePromises.push(new Promise((resolve, reject) => {
+                    let reader = new FileReader();
+                    reader.onload = () => {
+                        resolve({
+                            fileName: files[i].name,
+                            mimeType: files[i].type,
+                            fileData: reader.result.split(',')[1] // Ambil base64-nya saja
+                        });
+                    };
+                    reader.onerror = reject;
+                    reader.readAsDataURL(files[i]);
+                }));
+            }
 
-            reader.onload = function() {
-                const base64Data = reader.result.split(',')[1]; 
+            try {
+                // Tunggu sampai semua foto selesai diproses menjadi data teks
+                const filesArray = await Promise.all(filePromises);
 
-                // Data yang akan dikirim ke Google Sheets
                 const payload = {
                     nama: document.getElementById('nama').value,
                     nohp: document.getElementById('nohp').value,
                     status: document.getElementById('status').value,
                     lokasi: document.getElementById('lokasi').value,
                     keluhan: document.getElementById('keluhan').value,
-                    fileName: file.name,
-                    mimeType: file.type,
-                    fileData: base64Data
+                    files: filesArray // Mengirim sekumpulan foto ke server
                 };
 
-                // Proses pengiriman ke Google Apps Script (Server)
-                fetch(scriptURL, {
+                // Kirim ke Google Apps Script
+                const response = await fetch(scriptURL, {
                     method: 'POST',
                     body: JSON.stringify(payload)
-                })
-                .then(response => response.json())
-                .then(result => {
-                    if(result.status === 'success') {
-                        // 1. Tampilkan popup sukses
-                        successModal.classList.add('active');
-                        form.reset(); 
-
-                        // 2. Siapkan Pesan WA dan Link Foto
-                        const pesanWA = `*🚨 LAPORAN MASUK (TERSIMPAN DI SERVER) 🚨*%0A%0A` +
-                                      `*Nama:* ${payload.nama}%0A` +
-                                      `*No HP:* ${payload.nohp}%0A` +
-                                      `*Status:* ${payload.status}%0A` +
-                                      `*Lokasi:* ${payload.lokasi}%0A` +
-                                      `*Keluhan:* ${payload.keluhan}%0A%0A` +
-                                      `*📸 Link Bukti Foto:* %0A${result.fileUrl}`;
-
-                        const urlWA = `https://wa.me/${nomorAdminWA}?text=${pesanWA}`;
-                        
-                        // 3. Pasang aksi ke tombol "LANJUT KE WHATSAPP" agar membuka aplikasi WA secara aman (tidak diblokir browser)
-                        lanjutWaBtn.onclick = function() {
-                            window.open(urlWA, '_blank');
-                            successModal.classList.remove('active'); // Menyembunyikan popup setelah WA terbuka
-                        };
-
-                    } else {
-                        alert('Gagal menyimpan ke server: ' + result.message);
-                    }
-                    
-                    // Kembalikan tombol kirim seperti semula
-                    btnKirim.style.display = 'flex';
-                    loadingText.style.display = 'none';
-                })
-                .catch(error => {
-                    console.error('Error!', error.message);
-                    alert('Terjadi kesalahan jaringan! Pastikan koneksi internet stabil.');
-                    btnKirim.style.display = 'flex';
-                    loadingText.style.display = 'none';
                 });
-            };
+                
+                const result = await response.json();
 
-            reader.readAsDataURL(file);
+                if(result.status === 'success') {
+                    successModal.classList.add('active');
+                    form.reset(); 
+
+                    // Memisahkan URL menggunakan %0A (kode spasi/enter untuk WA)
+                    const formatLinksWA = result.fileUrl.split('\n').join('%0A');
+
+                    const pesanWA = `*🚨 LAPORAN MASUK (TERSIMPAN DI SERVER) 🚨*%0A%0A` +
+                                  `*Nama:* ${payload.nama}%0A` +
+                                  `*No HP:* ${payload.nohp}%0A` +
+                                  `*Status:* ${payload.status}%0A` +
+                                  `*Lokasi:* ${payload.lokasi}%0A` +
+                                  `*Keluhan:* ${payload.keluhan}%0A%0A` +
+                                  `*📸 Link Bukti Foto:* %0A${formatLinksWA}`;
+
+                    const urlWA = `https://wa.me/${nomorAdminWA}?text=${pesanWA}`;
+                    
+                    lanjutWaBtn.onclick = function() {
+                        window.open(urlWA, '_blank');
+                        successModal.classList.remove('active'); 
+                    };
+
+                } else {
+                    alert('Gagal menyimpan ke server: ' + result.message);
+                }
+            } catch (error) {
+                console.error('Error!', error);
+                alert('Terjadi kesalahan jaringan! Pastikan koneksi internet stabil.');
+            } finally {
+                // Kembalikan tombol kirim
+                btnKirim.style.display = 'flex';
+                loadingText.style.display = 'none';
+            }
         });
     </script>
 </body>
