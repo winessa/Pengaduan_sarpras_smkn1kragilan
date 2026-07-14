@@ -3,90 +3,178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SMK CYBER - LaporKu</title>
+    <title>Portal Pengaduan - SMKN 1 Kragilan</title>
     <style>
-        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&display=swap');
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap');
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap');
 
-        * { box-sizing: border-box; margin: 0; padding: 0; }
+        * { 
+            box-sizing: border-box; 
+            margin: 0; 
+            padding: 0; 
+        }
         
         body { 
             font-family: 'Poppins', sans-serif; 
-            background: #000; 
-            color: #eee; 
+            
+            /* --- BACKGROUND PREMIUM --- */
+            /* Overlay transparan biru dongker (navy) dipadukan dengan foto */
+            background-image: linear-gradient(rgba(0, 33, 71, 0.75), rgba(0, 15, 35, 0.9)), url('kebersihan.png'); 
+            
+            background-size: cover;
+            background-position: center;
+            background-repeat: no-repeat;
+            background-attachment: fixed;
+            color: #333; 
             min-height: 100vh; 
             display: flex; 
             justify-content: center; 
             align-items: center; 
             padding: 20px; 
-            overflow-x: hidden; 
-        }
-        
-        body::before { 
-            content: ''; 
-            position: absolute; 
-            top: 0; left: 0; right: 0; bottom: 0; 
-            background: radial-gradient(circle at 10% 20%, rgba(255, 0, 255, 0.1) 0%, transparent 40%), radial-gradient(circle at 90% 80%, rgba(0, 255, 255, 0.1) 0%, transparent 40%); 
-            z-index: -1; 
         }
 
         .form-container { 
-            background: rgba(20, 20, 20, 0.8); 
-            padding: 40px; 
-            border-radius: 15px; 
-            box-shadow: 0 0 30px rgba(0, 255, 255, 0.3); 
+            background: #ffffff; 
+            padding: 45px 40px; 
+            border-radius: 12px; 
+            /* Bayangan lebih dalam dan lembut agar form seolah melayang elegan */
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.25); 
             width: 100%; 
-            max-width: 500px; 
-            backdrop-filter: blur(10px); 
-            border: 2px solid #00ffff; 
-            position: relative; 
-            overflow: hidden; 
+            max-width: 550px; 
+            border-top: 6px solid #FFC107; /* Aksen kuning tetap dipertahankan */
         }
 
-        .form-container::before { 
-            content: ''; 
-            position: absolute; 
-            top: -2px; left: -2px; right: -2px; height: 4px; 
-            background: #ff00ff; 
-            box-shadow: 0 0 10px #ff00ff, 0 0 20px #ff00ff; 
+        .header { 
+            text-align: center; 
+            margin-bottom: 30px; 
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f0f0f0; /* Garis bawah yang lebih rapi/tidak putus-putus */
         }
 
-        .header { text-align: center; margin-bottom: 35px; }
-        .header h2 { font-family: 'Orbitron', sans-serif; color: #fff; font-weight: 700; font-size: 32px; margin-bottom: 10px; text-transform: uppercase; letter-spacing: 2px; text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; animation: pulsateNeon 2s infinite alternate; }
-        
-        @keyframes pulsateNeon { 
-            0% { text-shadow: 0 0 5px #ff00ff, 0 0 10px #ff00ff, 0 0 20px #ff00ff; } 
-            100% { text-shadow: 0 0 2px #ff00ff, 0 0 5px #ff00ff, 0 0 10px #ff00ff; } 
+        .header h2 { 
+            color: #003366; 
+            font-weight: 700; 
+            font-size: 26px; 
+            margin-bottom: 8px; 
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
         }
         
-        .header p { color: #00ffff; font-size: 14px; text-shadow: 0 0 5px #00ffff; }
-        
-        .form-group { margin-bottom: 25px; }
-        label { display: block; margin-bottom: 10px; color: #eee; font-weight: 600; font-size: 14px; text-transform: uppercase; letter-spacing: 1px; text-shadow: 0 0 3px rgba(238, 238, 238, 0.5); }
-        
-        input[type="text"], input[type="tel"], select, textarea, input[type="file"] { 
-            width: 100%; padding: 15px; border: 1px solid #333; border-radius: 5px; font-size: 14px; font-family: 'Poppins', sans-serif; background: #111; color: #00ff00; transition: all 0.3s ease; box-shadow: inset 0 0 5px rgba(0, 0, 0, 0.5); 
+        .header p { 
+            color: #666; 
+            font-size: 14px; 
+            line-height: 1.6;
+            font-weight: 500;
         }
         
-        input:focus, select:focus, textarea:focus { border-color: #00ffff; outline: none; box-shadow: 0 0 10px #00ffff, 0 0 20px rgba(0, 255, 255, 0.5); }
-        textarea { resize: vertical; min-height: 120px; }
-        
-        input[type="file"] { background: #111; padding: 12px; cursor: pointer; border-color: #ff00ff; color: #ff00ff; }
-        input[type="file"]::-webkit-file-upload-button { background: #ff00ff; color: #000; border: none; padding: 8px 15px; border-radius: 3px; font-family: 'Poppins', sans-serif; font-weight: 600; cursor: pointer; text-transform: uppercase; font-size: 12px; margin-right: 10px; box-shadow: 0 0 5px #ff00ff; }
-        
-        .btn-submit { background: #00cc00; color: #000; border: none; padding: 18px; width: 100%; border-radius: 5px; font-family: 'Orbitron', sans-serif; font-size: 18px; font-weight: 700; cursor: pointer; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 12px; text-transform: uppercase; letter-spacing: 1px; box-shadow: 0 0 5px #00cc00, 0 0 10px #00cc00; }
-        .btn-submit:hover { transform: translateY(-3px) scale(1.02); background: #00ff00; box-shadow: 0 0 10px #00ff00, 0 0 20px #00ff00; }
-        
-        /* Loading Text */
-        .loading { display: none; text-align: center; color: #00ffff; font-family: 'Orbitron'; font-size: 16px; margin-top: 15px; animation: blink 1s infinite; }
-        @keyframes blink { 0% { opacity: 0.2; } 50% { opacity: 1; } 100% { opacity: 0.2; } }
+        .form-group { 
+            margin-bottom: 22px; 
+        }
 
-        /* CSS UNTUK POPUP MODAL CYBERPUNK */
+        label { 
+            display: block; 
+            margin-bottom: 8px; 
+            color: #003366; 
+            font-weight: 600; 
+            font-size: 14px; 
+        }
+        
+        input[type="text"], 
+        input[type="tel"], 
+        select, 
+        textarea, 
+        input[type="file"] { 
+            width: 100%; 
+            padding: 14px 16px; 
+            border: 1px solid #e1e4e8; 
+            border-radius: 8px; 
+            font-size: 14px; 
+            font-family: 'Poppins', sans-serif; 
+            background: #f8f9fa; 
+            color: #333; 
+            transition: all 0.3s ease; 
+        }
+        
+        input:focus, 
+        select:focus, 
+        textarea:focus { 
+            border-color: #003366; 
+            outline: none; 
+            background: #ffffff;
+            box-shadow: 0 0 0 4px rgba(0, 51, 102, 0.1); 
+        }
+
+        textarea { 
+            resize: vertical; 
+            min-height: 120px; 
+        }
+        
+        input[type="file"] { 
+            background: #f8f9fa; 
+            padding: 10px; 
+            cursor: pointer; 
+        }
+
+        input[type="file"]::-webkit-file-upload-button { 
+            background: #003366; 
+            color: #ffffff; 
+            border: none; 
+            padding: 8px 16px; 
+            border-radius: 6px; 
+            font-family: 'Poppins', sans-serif; 
+            font-weight: 500; 
+            cursor: pointer; 
+            font-size: 13px; 
+            margin-right: 12px; 
+            transition: background 0.2s;
+        }
+
+        input[type="file"]::-webkit-file-upload-button:hover {
+            background: #002244;
+        }
+        
+        .btn-submit { 
+            background: #003366; 
+            color: #ffffff; 
+            border: none;
+            border-bottom: 4px solid #d39e00; /* Warna dasar kuning gelap */
+            padding: 16px; 
+            width: 100%; 
+            border-radius: 8px; 
+            font-family: 'Poppins', sans-serif; 
+            font-size: 16px; 
+            font-weight: 600; 
+            cursor: pointer; 
+            transition: all 0.2s ease; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            margin-top: 20px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .btn-submit:hover { 
+            background: #FFC107; 
+            color: #003366;
+            border-bottom-color: #b38600;
+            transform: translateY(2px);
+        }
+        
+        .loading { 
+            display: none; 
+            text-align: center; 
+            color: #003366; 
+            font-size: 14px; 
+            margin-top: 15px; 
+            font-weight: 600;
+        }
+
+        /* Modal Styles */
         .modal-overlay {
             position: fixed;
             top: 0; left: 0; right: 0; bottom: 0;
-            background: rgba(0, 0, 0, 0.85);
-            backdrop-filter: blur(8px);
+            background: rgba(0, 15, 35, 0.8); /* Gelap premium */
+            backdrop-filter: blur(5px);
             display: flex;
             justify-content: center;
             align-items: center;
@@ -102,67 +190,67 @@
         }
 
         .modal-content {
-            background: #0a0a0a;
+            background: #ffffff;
             padding: 40px 30px;
-            border-radius: 10px;
+            border-radius: 12px;
+            border-top: 6px solid #FFC107;
             text-align: center;
-            border: 2px solid #00ff00;
-            box-shadow: 0 0 30px rgba(0, 255, 0, 0.3), inset 0 0 15px rgba(0, 255, 0, 0.1);
-            transform: scale(0.7);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            transform: translateY(20px);
             transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            max-width: 400px;
+            max-width: 420px;
             width: 90%;
-            position: relative;
         }
 
         .modal-overlay.active .modal-content {
-            transform: scale(1);
+            transform: translateY(0);
         }
 
         .modal-icon {
-            font-size: 60px;
+            font-size: 55px;
             line-height: 1;
             margin-bottom: 20px;
-            text-shadow: 0 0 20px #00ff00;
+            color: #FFC107; 
         }
 
         .modal-content h3 {
-            font-family: 'Orbitron', sans-serif;
-            color: #fff;
+            color: #003366;
             font-size: 24px;
-            margin-bottom: 10px;
-            text-shadow: 0 0 10px #00ff00;
-            text-transform: uppercase;
+            margin-bottom: 12px;
+            font-weight: 700;
         }
 
         .modal-content p {
-            color: #bbb;
+            color: #666;
             font-size: 14px;
             margin-bottom: 30px;
-            line-height: 1.5;
+            line-height: 1.6;
         }
 
         .btn-close-modal {
-            background: #00ff00;
-            color: #000;
-            border: 2px solid #00ff00;
-            padding: 12px 30px;
-            border-radius: 5px;
-            font-family: 'Orbitron', sans-serif;
-            font-size: 16px;
-            font-weight: 700;
+            background: #25D366; 
+            color: #ffffff;
+            border: none;
+            padding: 14px 25px;
+            border-radius: 8px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
             cursor: pointer;
-            transition: all 0.3s ease;
-            text-transform: uppercase;
-            letter-spacing: 1px;
-            box-shadow: 0 0 10px rgba(0, 255, 0, 0.2);
+            transition: all 0.2s ease;
+            width: 100%;
         }
 
         .btn-close-modal:hover {
-            background: #00cc00;
-            border-color: #00cc00;
-            box-shadow: 0 0 20px #00ff00;
-            transform: translateY(-2px);
+            background: #1ebe57;
+        }
+
+        .form-hint {
+            color: #777;
+            font-size: 12px;
+            display: block;
+            margin-top: 8px;
+            font-weight: 500;
         }
     </style>
 </head>
@@ -171,65 +259,63 @@
     <div class="form-container">
         <div class="header">
             <h2>SMKN 1 Kragilan</h2>
-            <p>Sistem Pengaduan Kebersihan & Kerusakan Sekolah.</p>
+            <p>Portal Layanan Pengaduan Kebersihan & Kerusakan Fasilitas Sekolah</p>
         </div>
 
         <form id="pengaduanForm">
             <div class="form-group">
-                <label for="nama">👤 Nama Lengkap</label>
-                <input type="text" id="nama" required>
+                <label for="nama">Nama Lengkap</label>
+                <input type="text" id="nama" placeholder="Masukkan nama lengkap Anda" required>
             </div>
             <div class="form-group">
-                <label for="nohp">📞 No HP / WhatsApp</label>
+                <label for="nohp">No HP / WhatsApp</label>
                 <input type="tel" id="nohp" placeholder="Contoh: 081234567890" required>
             </div>
             <div class="form-group">
-                <label for="status">🎓 Status</label>
+                <label for="status">Status Pelapor</label>
                 <select id="status" required>
                     <option value="" disabled selected>Pilih Status...</option>
                     <option value="Siswa">Siswa</option>
                     <option value="Guru">Guru / Staf</option>
-                    <option value="Karyawan">Warga Sekolah</option>
+                    <option value="Karyawan">Warga Sekolah Lainnya</option>
                 </select>
             </div>
             <div class="form-group">
-                <label for="lokasi">📍 Lokasi Kejadian</label>
-                <input type="text" id="lokasi" required>
+                <label for="lokasi">Lokasi Kejadian</label>
+                <input type="text" id="lokasi" placeholder="Sebutkan lokasi spesifik (Misal: Lab Komputer 1)" required>
             </div>
             <div class="form-group">
-                <label for="keluhan">📝 Detail Keluhan</label>
-                <textarea id="keluhan" required></textarea>
+                <label for="keluhan">Detail Keluhan</label>
+                <textarea id="keluhan" placeholder="Jelaskan secara detail mengenai kerusakan atau masalah kebersihan..." required></textarea>
             </div>
             
             <div class="form-group">
-                <label for="foto">📸 Ambil / Upload Foto (Maks 5)</label>
+                <label for="foto">Unggah Foto Bukti</label>
                 <input type="file" id="foto" accept="image/*" multiple required>
-                <small style="color: #00ffff; font-size: 11px; display: block; margin-top: 8px; opacity: 0.8;">
-                    *Bisa pilih dari Galeri atau Kamera. Pilih sekaligus maksimal 5 foto.
+                <small class="form-hint">
+                    *Maksimal 5 foto (Format: JPG, PNG).
                 </small>
             </div>
 
             <button type="submit" class="btn-submit" id="btnKirim">
-                KIRIM LAPORAN KE SERVER
+                Kirim Laporan
             </button>
-            <div class="loading" id="loadingText">Mengirim Data & Mengunggah Foto... Harap Tunggu...</div>
+            <div class="loading" id="loadingText">Sedang memproses laporan Anda... Harap tunggu.</div>
         </form>
     </div>
 
     <div class="modal-overlay" id="successModal">
         <div class="modal-content">
             <div class="modal-icon">✅</div>
-            <h3>TRANSMISI SUKSES</h3>
-            <p>Data keluhan dan foto bukti telah berhasil diamankan ke dalam server pusat.</p>
-            <button class="btn-close-modal" id="lanjutWaBtn">LANJUT KE WHATSAPP</button>
+            <h3>Laporan Berhasil Dikirim</h3>
+            <p>Terima kasih. Data keluhan dan bukti foto Anda telah berhasil disimpan ke dalam sistem sekolah untuk ditindaklanjuti.</p>
+            <button class="btn-close-modal" id="lanjutWaBtn">Lanjutkan ke WhatsApp</button>
         </div>
     </div>
 
     <script>
-        // Link Apps Script
         const scriptURL = 'https://script.google.com/macros/s/AKfycbyCKa7Itb8N7fgS_LsbYSgWNwCt7Bq92RpNaHQJ5XPpd3-QRI5mPcQZge_ATaoGlgyx5Q/exec';
         
-        // Nomor WA 
         const nomorAdminWA = '6288210222618';
         
         const form = document.getElementById('pengaduanForm');
@@ -244,17 +330,14 @@
             const fileInput = document.getElementById('foto');
             const files = fileInput.files;
 
-            // SISTEM KEAMANAN: Cek apakah foto lebih dari 5
             if (files.length > 5) {
                 alert('Maksimal hanya boleh mengunggah 5 foto sekaligus! Silakan kurangi pilihan foto Anda.');
-                return; // Membatalkan pengiriman
+                return;
             }
 
-            // Tampilkan animasi loading
             btnKirim.style.display = 'none';
             loadingText.style.display = 'block';
 
-            // Memproses semua file foto secara bersamaan (Looping)
             let filePromises = [];
             for (let i = 0; i < files.length; i++) {
                 filePromises.push(new Promise((resolve, reject) => {
@@ -263,7 +346,7 @@
                         resolve({
                             fileName: files[i].name,
                             mimeType: files[i].type,
-                            fileData: reader.result.split(',')[1] // Ambil base64-nya saja
+                            fileData: reader.result.split(',')[1] 
                         });
                     };
                     reader.onerror = reject;
@@ -272,60 +355,6 @@
             }
 
             try {
-                // Tunggu sampai semua foto selesai diproses menjadi data teks
                 const filesArray = await Promise.all(filePromises);
 
-                const payload = {
-                    nama: document.getElementById('nama').value,
-                    nohp: document.getElementById('nohp').value,
-                    status: document.getElementById('status').value,
-                    lokasi: document.getElementById('lokasi').value,
-                    keluhan: document.getElementById('keluhan').value,
-                    files: filesArray // Mengirim sekumpulan foto ke server
-                };
-
-                // Kirim ke Google Apps Script
-                const response = await fetch(scriptURL, {
-                    method: 'POST',
-                    body: JSON.stringify(payload)
-                });
-                
-                const result = await response.json();
-
-                if(result.status === 'success') {
-                    successModal.classList.add('active');
-                    form.reset(); 
-
-                    // Memisahkan URL menggunakan %0A (kode spasi/enter untuk WA)
-                    const formatLinksWA = result.fileUrl.split('\n').join('%0A');
-
-                    const pesanWA = `*🚨 LAPORAN MASUK (TERSIMPAN DI SERVER) 🚨*%0A%0A` +
-                                  `*Nama:* ${payload.nama}%0A` +
-                                  `*No HP:* ${payload.nohp}%0A` +
-                                  `*Status:* ${payload.status}%0A` +
-                                  `*Lokasi:* ${payload.lokasi}%0A` +
-                                  `*Keluhan:* ${payload.keluhan}%0A%0A` +
-                                  `*📸 Link Bukti Foto:* %0A${formatLinksWA}`;
-
-                    const urlWA = `https://wa.me/${nomorAdminWA}?text=${pesanWA}`;
-                    
-                    lanjutWaBtn.onclick = function() {
-                        window.open(urlWA, '_blank');
-                        successModal.classList.remove('active'); 
-                    };
-
-                } else {
-                    alert('Gagal menyimpan ke server: ' + result.message);
-                }
-            } catch (error) {
-                console.error('Error!', error);
-                alert('Terjadi kesalahan jaringan! Pastikan koneksi internet stabil.');
-            } finally {
-                // Kembalikan tombol kirim
-                btnKirim.style.display = 'flex';
-                loadingText.style.display = 'none';
-            }
-        });
-    </script>
-</body>
-</html>
+                const
